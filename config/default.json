@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://deepak:deepak@cluster0.ybigo.azure.mongodb.net/mernapp?retryWrites=true&w=majority",
+  "jwtTokenSecret": "mytoken"
+}
