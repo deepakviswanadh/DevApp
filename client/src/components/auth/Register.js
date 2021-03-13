@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-
-const Register = () => {
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
+import { regUser } from "../../actions/auth";
+const Register = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,28 +19,12 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (password !== password2) console.log("not same");
-    else {
-      const newUser = {
-        name,
-        email,
-        password,
-      };
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        const body = JSON.stringify(newUser);
-        const res = await axios.post("/api/users", body, config);
-        console.log(res.data);
-      } catch (e) {
-        console.error(e.response.data);
-      }
-    }
+    if (password !== password2)
+      props.setAlert("passwords dont match", "danger");
+    else props.regUser({ name, email, password });
   };
 
+  if (props.isAuthenticated) return <Redirect to="/dashboard" />;
   return (
     <section className="container">
       <h1 className="large text-primary">Sign Up</h1>
@@ -54,7 +39,7 @@ const Register = () => {
             name="name"
             value={name}
             onChange={(e) => onChange(e)}
-            required
+            //required
           />
         </div>
         <div className="form-group">
@@ -64,7 +49,7 @@ const Register = () => {
             name="email"
             value={email}
             onChange={(e) => onChange(e)}
-            required
+            // required
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -78,7 +63,7 @@ const Register = () => {
             name="password"
             value={password}
             onChange={(e) => onChange(e)}
-            required
+            //required
             minLength="6"
           />
         </div>
@@ -89,7 +74,7 @@ const Register = () => {
             name="password2"
             value={password2}
             onChange={(e) => onChange(e)}
-            required
+            // required
             minLength="6"
           />
         </div>
@@ -102,4 +87,10 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+  };
+};
+
+export default connect(mapStateToProps, { setAlert, regUser })(Register);

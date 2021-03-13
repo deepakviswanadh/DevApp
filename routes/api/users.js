@@ -7,6 +7,9 @@ let express = require("express"),
   config = require("config"),
   User = require("../../models/User");
 
+// @route    POST api/users
+// @desc     Register user and get auth token
+// @access   public
 router.post(
   "/",
   [
@@ -16,13 +19,12 @@ router.post(
   ],
   async (req, res) => {
     let x = validationResult(req);
-    if (!x.isEmpty()) return res.status(400).json({ error: x.array() });
-    //console.log(req.body);
+    if (!x.isEmpty()) return res.status(400).json({ errors: x.array() });
     let { name, email, password } = req.body;
     try {
       let user = await User.findOne({ email });
       if (user)
-        return res.status(400).json({ error: [{ message: "user exists" }] });
+        return res.status(400).json({ errors: [{ message: "user exists" }] });
       let avatar = gravatar.url(email, {
         s: "200",
         r: "pg",

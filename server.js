@@ -1,6 +1,5 @@
 let express = require("express"),
   http = require("http"),
-  mongoose = require("mongoose"),
   Db = require("./config/db");
 // const bodyParser = require("body-parser");
 
@@ -10,7 +9,6 @@ let app = express(),
 // app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json({ extended: false }));
 
-//connect to db
 Db();
 
 //routes
@@ -19,6 +17,6 @@ app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/profile", require("./routes/api/profile"));
-server.listen(process.env.PORT || 3000, process.env.IP, () => {
-  console.log("3000 up");
+server.listen(process.env.PORT || 5000, process.env.IP, () => {
+  console.log("5000 up");
 });
